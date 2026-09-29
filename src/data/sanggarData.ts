@@ -4,6 +4,8 @@ const SANGGAR_PHOTO_URL =
 export const SANGGAR_INFO = {
   name: 'SANGGAR PITALOKA KUSUMA PUTRI',
   shortName: 'Sanggar Pitaloka Kusuma Putri',
+  logoUrl:
+    'https://ihqoctaqlxqtzxcriltf.supabase.co/storage/v1/object/public/Sanggar%20Pitaloka/Logo.jpg',
   tagline: 'Pelestarian & Pembinaan Seni Tari Tradisional Sunda dan Nusantara di Kota Bandung',
   whatsappDisplay: '0858-7194-9535',
   whatsappRaw: '085871949535',
@@ -20,8 +22,7 @@ export const SANGGAR_INFO = {
     'https://maps.google.com/maps?q=Jl.+Babakan+Baru+Gg.+Aster+No.04,+Sukapada,+Cibeunying+Kidul,+Kota+Bandung,+Jawa+Barat&t=&z=16&ie=UTF8&iwloc=&output=embed',
   googleMapsDirectUrl:
     'https://www.google.com/maps/search/?api=1&query=Jl.+Babakan+Baru+Gg.+Aster+No.04,+Kel.+Sukapada,+Kec.+Cibeunying+Kidul,+Kota+Bandung,+Jawa+Barat',
-  heroImage:
-    'https://ihqoctaqlxqtzxcriltf.supabase.co/storage/v1/object/public/Sanggar%20Pitaloka/SaveClip.App_783255386_17986318317043941_745772693864414650_n.jpg',
+  heroImage: SANGGAR_PHOTO_URL,
 };
 
 export interface ScheduleItem {
@@ -325,7 +326,48 @@ export interface TestimonialItem {
   outcomeHighlight: string;
 }
 
-export const DAFTAR_TESTIMONI: TestimonialItem[] = [];
+export const DAFTAR_TESTIMONI: TestimonialItem[] = [
+  {
+    id: 'testi-1',
+    studentName: 'Nadia Pramesti Putri',
+    role: 'Siswi SMA Negeri di Bandung · Angkatan 2024',
+    programTaken: 'Kelas Jaipong Kreasi & Mojang Priangan',
+    joinPeriod: 'Bergabung selama 2 tahun',
+    quote:
+      'Awal masuk sanggar saya masih kaku mendengar ketukan kendang dan sering gugup saat harus menari di depan umum. Pelatih di Sanggar Pitaloka Kusuma Putri membimbing teknik wiraga dari dasar dengan sangat sabar hingga gerakan saya jauh lebih luwes dan bertenaga.',
+    outcomeHighlight: 'Juara 2 Pasanggiri Jaipong Kreasi Tingkat Pelajar Kota Bandung 2026',
+  },
+  {
+    id: 'testi-2',
+    studentName: 'Ibu Rina Kartika (Orang Tua dari Кирана, 8 Tahun)',
+    role: 'Wali Murid Kelas Dasar Anak · Sukapada, Bandung',
+    programTaken: 'Kelas Dasar Tari Anak (Sekar Alit)',
+    joinPeriod: 'Bergabung selama 14 bulan',
+    quote:
+      'Dulu anak saya cenderung pemalu dan lebih banyak bermain gawai di rumah. Sejak rutin latihan setiap akhir pekan di Gg. Aster, postur tubuhnya tegap, punya banyak teman sebaya yang positif, dan sudah berani tampil menari Tari Kijang di acara sekolah.',
+    outcomeHighlight: 'Tampil percaya diri di 4 pentas sekolah & panggung seni kecamatan',
+  },
+  {
+    id: 'testi-3',
+    studentName: 'Salma Maharani Kusuma',
+    role: 'Mahasiswi di Bandung · Tim Pentas Sanggar',
+    programTaken: 'Kelas Tari Klasik Sunda & Tari Merak',
+    joinPeriod: 'Bergabung selama 3 tahun',
+    quote:
+      'Di Sanggar Pitaloka Kusuma Putri kami tidak hanya diajarkan hafalan koreografi, tetapi juga filosofi setiap tarian, cara mengenakan sinjang dan siger dengan benar, serta etika panggung. Suasana kekeluargaannya membuat latihan selalu dirindukan.',
+    outcomeHighlight: 'Terpilih dalam Tim Delegasi Pentas Budaya & Mapag Panganten Reguler',
+  },
+  {
+    id: 'testi-4',
+    studentName: 'Dinda Ayu Lestari',
+    role: 'Siswi SMP · Peserta Kelas Privat FLS2N',
+    programTaken: 'Kelas Privat & Persiapan Ujian / Lomba',
+    joinPeriod: 'Program Intensif 6 bulan',
+    quote:
+      'Mengambil kelas privat untuk persiapan lomba FLS2N sangat membantu saya memperbaiki detail gerak sampur dan penguasaan panggung. Jadwalnya fleksibel sepulang sekolah dan evaluasinya sangat terarah di setiap pertemuan.',
+    outcomeHighlight: 'Finalis FLS2N Cabang Tari Kreasi Tingkat Kota Bandung',
+  },
+];
 
 export interface FaqItem {
   question: string;

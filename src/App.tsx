@@ -119,15 +119,15 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Right Dominant Visual Carrier (6 cols) */}
+              {/* Right Dominant 16:9 Visual Carrier (6 cols) */}
               <div className="lg:col-span-6">
-                <div className="relative rounded-2xl overflow-hidden border border-[#E6E1D6] bg-[#1C1917] shadow-lg">
+                <div className="relative rounded-2xl overflow-hidden border border-[#E6E1D6] bg-[#1C1917] aspect-video shadow-lg">
                   <ResilientImage
                     src={SANGGAR_INFO.heroImage}
                     alt="Penari tradisional Sunda Sanggar Pitaloka Kusuma Putri tampil di atas panggung"
-                    className="w-full h-auto object-contain block"
+                    className="w-full h-full object-cover"
                   />
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
                   <div className="absolute bottom-0 inset-x-0 p-5 sm:p-6 flex flex-col sm:flex-row sm:items-end justify-between gap-3">
                     <div>
                       <div className="text-xs text-[#FDE68A] font-semibold">
@@ -174,8 +174,15 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-10 border-b border-white/10">
             <div className="md:col-span-5 space-y-3">
-              <div className="font-display text-2xl font-bold text-[#FAF8F5]">
-                {SANGGAR_INFO.name}
+              <div className="flex items-center gap-3.5">
+                <img
+                  src={SANGGAR_INFO.logoUrl}
+                  alt={`Logo ${SANGGAR_INFO.name}`}
+                  className="w-12 h-12 rounded-full object-cover border border-white/20 bg-[#292524] shrink-0"
+                />
+                <div className="font-display text-2xl font-bold text-[#FAF8F5]">
+                  {SANGGAR_INFO.name}
+                </div>
               </div>
               <p className="text-xs text-[#A8A29E] leading-relaxed max-w-sm">
                 {SANGGAR_INFO.address}
