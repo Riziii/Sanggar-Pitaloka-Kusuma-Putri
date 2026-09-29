@@ -1,0 +1,6 @@
+{
+  "name": "Sanggar Pitaloka Kusuma Putri",
+  "description": "Website resmi Sanggar Tari Pitaloka Kusuma Putri Bandung — pusat pelatihan tari tradisional Sunda & Nusantara, galeri pertunjukan, jadwal kelas, dan pendaftaran anggota baru via WhatsApp.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

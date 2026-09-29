@@ -1,0 +1,149 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 1. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // 2. Reusable Hardened Primitives
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedUser() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isValidTestimonialItem(item) {
+      return item is map &&
+             item.keys().hasAll([
+               'id',
+               'studentName',
+               'role',
+               'programTaken',
+               'joinPeriod',
+               'quote',
+               'outcomeHighlight',
+               'authorUid',
+               'createdAtIso'
+             ]) &&
+             item.keys().hasOnly([
+               'id',
+               'studentName',
+               'role',
+               'programTaken',
+               'joinPeriod',
+               'quote',
+               'outcomeHighlight',
+               'authorUid',
+               'createdAtIso'
+             ]) &&
+             isValidId(item.id) &&
+             item.studentName is string && item.studentName.size() >= 2 && item.studentName.size() <= 100 &&
+             item.role is string && item.role.size() >= 2 && item.role.size() <= 120 &&
+             item.programTaken is string && item.programTaken.size() >= 2 && item.programTaken.size() <= 120 &&
+             item.joinPeriod is string && item.joinPeriod.size() >= 2 && item.joinPeriod.size() <= 80 &&
+             item.quote is string && item.quote.size() >= 10 && item.quote.size() <= 1000 &&
+             item.outcomeHighlight is string && item.outcomeHighlight.size() >= 3 && item.outcomeHighlight.size() <= 200 &&
+             item.authorUid is string && item.authorUid.size() >= 3 && item.authorUid.size() <= 128 &&
+             item.createdAtIso is string && item.createdAtIso.size() >= 10 && item.createdAtIso.size() <= 40;
+    }
+
+    function isValidTestimonialsBoard(data) {
+      return data.keys().hasAll(['boardId', 'items', 'updatedAt']) &&
+             data.keys().hasOnly(['boardId', 'items', 'updatedAt']) &&
+             data.boardId is string && data.boardId.size() == 11 && data.boardId == 'public_feed' &&
+             data.items is list && data.items.size() <= 50 &&
+             (data.items.size() == 0 || isValidTestimonialItem(data.items[0])) &&
+             data.updatedAt is timestamp && data.updatedAt == request.time;
+    }
+
+    function isValidGalleryItem(item) {
+      return item is map &&
+             item.keys().hasAll([
+               'id',
+               'title',
+               'category',
+               'eventDate',
+               'location',
+               'image',
+               'description',
+               'dancersCount'
+             ]) &&
+             item.keys().hasOnly([
+               'id',
+               'title',
+               'category',
+               'eventDate',
+               'location',
+               'image',
+               'description',
+               'dancersCount'
+             ]) &&
+             isValidId(item.id) &&
+             item.title is string && item.title.size() >= 2 && item.title.size() <= 140 &&
+             item.category is string && item.category.size() >= 2 && item.category.size() <= 60 &&
+             item.eventDate is string && item.eventDate.size() >= 2 && item.eventDate.size() <= 60 &&
+             item.location is string && item.location.size() >= 2 && item.location.size() <= 160 &&
+             item.image is string && item.image.size() >= 5 && item.image.size() <= 250000 &&
+             item.description is string && item.description.size() >= 5 && item.description.size() <= 600 &&
+             item.dancersCount is string && item.dancersCount.size() >= 2 && item.dancersCount.size() <= 60;
+    }
+
+    function isValidGalleryBoard(data) {
+      return data.keys().hasAll(['boardId', 'items', 'updatedAt']) &&
+             data.keys().hasOnly(['boardId', 'items', 'updatedAt']) &&
+             data.boardId is string && data.boardId.size() == 14 && data.boardId == 'public_gallery' &&
+             data.items is list && data.items.size() <= 12 &&
+             (data.items.size() == 0 || isValidGalleryItem(data.items[0])) &&
+             data.updatedAt is timestamp && data.updatedAt == request.time;
+    }
+
+    // Connection test endpoint
+    match /test/{docId} {
+      allow get: if isValidId(docId) && docId == 'connection';
+    }
+
+    // Admins Registry
+    match /admins/{adminId} {
+      allow get: if isVerifiedUser() && isValidId(adminId) && request.auth.uid == adminId;
+      allow list, create, update, delete: if false;
+    }
+
+    // Public Testimonials Board Document (Single-Document Get/Write, Zero List Queries)
+    match /testimonials_board/{boardId} {
+      allow get: if isValidId(boardId) && boardId == 'public_feed';
+      allow list: if false;
+      allow create: if isValidId(boardId) && boardId == 'public_feed' && isValidTestimonialsBoard(incoming());
+      allow update: if isValidId(boardId) && boardId == 'public_feed' && isValidTestimonialsBoard(incoming()) &&
+        incoming().boardId == existing().boardId &&
+        incoming().diff(existing()).affectedKeys().hasOnly(['items', 'updatedAt']);
+      allow delete: if false;
+    }
+
+    // Public Gallery Board Document (Single-Document Get/Write, Zero List Queries)
+    match /gallery_board/{boardId} {
+      allow get: if isValidId(boardId) && boardId == 'public_gallery';
+      allow list: if false;
+      allow create: if isValidId(boardId) && boardId == 'public_gallery' && isValidGalleryBoard(incoming());
+      allow update: if isValidId(boardId) && boardId == 'public_gallery' && isValidGalleryBoard(incoming()) &&
+        incoming().boardId == existing().boardId &&
+        incoming().diff(existing()).affectedKeys().hasOnly(['items', 'updatedAt']);
+      allow delete: if false;
+    }
+  }
+}

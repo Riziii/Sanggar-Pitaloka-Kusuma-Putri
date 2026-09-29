@@ -1,0 +1,62 @@
+{
+  "entities": {
+    "TestimonialsBoard": {
+      "title": "TestimonialsBoard",
+      "description": "Dokumen papan testimoni publik pengunjung dan anggota Sanggar Pitaloka Kusuma Putri",
+      "type": "object",
+      "properties": {
+        "boardId": {
+          "type": "string",
+          "description": "ID papan testimoni publik",
+          "enum": ["public_feed"]
+        },
+        "items": {
+          "type": "array",
+          "description": "Daftar testimoni pengunjung dan murid (maksimal 50 entri)"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Waktu pembaruan terakhir di server"
+        }
+      },
+      "required": ["boardId", "items", "updatedAt"]
+    },
+    "GalleryBoard": {
+      "title": "GalleryBoard",
+      "description": "Dokumen papan galeri foto kegiatan dan pementasan Sanggar Pitaloka Kusuma Putri",
+      "type": "object",
+      "properties": {
+        "boardId": {
+          "type": "string",
+          "description": "ID papan galeri foto publik",
+          "enum": ["public_gallery"]
+        },
+        "items": {
+          "type": "array",
+          "description": "Daftar foto galeri sanggar (maksimal 12 foto terkompresi)"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Waktu pembaruan terakhir di server"
+        }
+      },
+      "required": ["boardId", "items", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/testimonials_board/{boardId}": {
+      "schema": {
+        "$ref": "#/entities/TestimonialsBoard"
+      },
+      "description": "Dokumen tunggal papan testimoni publik Sanggar Pitaloka Kusuma Putri"
+    },
+    "/gallery_board/{boardId}": {
+      "schema": {
+        "$ref": "#/entities/GalleryBoard"
+      },
+      "description": "Dokumen tunggal galeri foto publik Sanggar Pitaloka Kusuma Putri"
+    }
+  }
+}
