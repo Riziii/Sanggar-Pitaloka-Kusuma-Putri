@@ -15,7 +15,36 @@
   </head>
   <body class="bg-[#FAF8F5] text-[#1C1917] antialiased selection:bg-[#9A3412]/15 selection:text-[#9A3412]">
     <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <script id="vite-entry" type="module" src="/src/main.tsx"></script>
+    <script>
+      (function () {
+        var fallbackLoaded = false;
+        function loadPrebuiltBundle() {
+          if (fallbackLoaded) return;
+          var root = document.getElementById('root');
+          if (root && root.children.length > 0) return;
+          fallbackLoaded = true;
+
+          var css = document.createElement('link');
+          css.rel = 'stylesheet';
+          css.href = './bundle/app.css';
+          document.head.appendChild(css);
+
+          var js = document.createElement('script');
+          js.type = 'module';
+          js.src = './bundle/app.js';
+          document.body.appendChild(js);
+        }
+
+        var entry = document.getElementById('vite-entry');
+        if (entry) {
+          entry.addEventListener('error', loadPrebuiltBundle);
+        }
+        window.addEventListener('load', function () {
+          setTimeout(loadPrebuiltBundle, 600);
+        });
+      })();
+    </script>
   </body>
 </html>
 
