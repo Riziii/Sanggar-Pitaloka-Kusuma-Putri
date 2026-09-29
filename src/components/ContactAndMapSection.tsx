@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ArrowUpRight, ChevronDown } from 'lucide-react';
+import { useViewport } from '../context/ViewportContext';
 import { DAFTAR_FAQ, SANGGAR_INFO } from '../data/sanggarData';
 
 interface ContactAndMapSectionProps {
@@ -9,6 +10,9 @@ interface ContactAndMapSectionProps {
 export const ContactAndMapSection: React.FC<ContactAndMapSectionProps> = ({
   initialInquiryTopic,
 }) => {
+  const { effectiveMode } = useViewport();
+  const isMobile = effectiveMode === 'mobile';
+  const isTablet = effectiveMode === 'tablet';
   const [senderName, setSenderName] = useState('');
   const [inquiryTopic, setInquiryTopic] = useState(
     initialInquiryTopic || 'Informasi Kurikulum & Kelas Pemula'
@@ -67,29 +71,44 @@ export const ContactAndMapSection: React.FC<ContactAndMapSectionProps> = ({
   };
 
   return (
-    <section id="kontak" className="py-20 md:py-24 bg-[#FAF8F5]">
-      <div className="max-w-7xl mx-auto px-6 space-y-20">
+    <section
+      id="kontak"
+      className={`${isMobile ? 'py-12' : isTablet ? 'py-16' : 'py-20 md:py-24'} bg-[#FAF8F5]`}
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-14 sm:space-y-20">
         {/* Part 1: Course Inquiry & Official Channels */}
         <div>
-          <div className="max-w-2xl pb-12">
-            <p className="text-xs text-[#78716C] mb-3">
+          <div className="max-w-2xl pb-8 sm:pb-12">
+            <p className="text-xs text-[#78716C] mb-2.5">
               Layanan Informasi Kursus · Konsultasi Kelas & Undangan Pentas
             </p>
-            <h2 className="font-display text-3xl md:text-4xl font-bold text-[#1C1917] tracking-tight">
+            <h2
+              className={`font-display font-bold text-[#1C1917] tracking-tight ${
+                isMobile ? 'text-2xl' : isTablet ? 'text-3xl' : 'text-3xl md:text-4xl'
+              }`}
+            >
               Hubungi Kami & Tanya Informasi Kursus
             </h2>
-            <p className="mt-4 text-base text-[#57534E]">
+            <p className={`mt-3 text-[#57534E] ${isMobile ? 'text-sm' : 'text-base'}`}>
               Masih ragu memilih kelas yang sesuai untuk usia Anda atau putra-putri Anda? Kirimkan
               pertanyaan seputar kurikulum kursus, jadwal coba latihan (trial), maupun ketersediaan
               kelas privat melalui formulir konsultasi atau kanal resmi kami.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-            {/* Course Inquiry Form (6 cols) */}
+          <div
+            className={`grid ${
+              isMobile || isTablet
+                ? 'grid-cols-1 gap-8'
+                : 'grid-cols-1 lg:grid-cols-12 gap-10'
+            } items-start`}
+          >
+            {/* Course Inquiry Form */}
             <form
               onSubmit={handleInquirySubmit}
-              className="lg:col-span-6 p-6 sm:p-8 rounded-2xl bg-[#F2EFE9] border border-[#E6E1D6] space-y-5"
+              className={`${
+                isMobile || isTablet ? '' : 'lg:col-span-6'
+              } p-5 sm:p-8 rounded-2xl bg-[#F2EFE9] border border-[#E6E1D6] space-y-5`}
             >
               <div className="border-b border-[#E6E1D6] pb-4">
                 <h3 className="font-display text-2xl font-bold text-[#1C1917]">
@@ -217,10 +236,14 @@ export const ContactAndMapSection: React.FC<ContactAndMapSectionProps> = ({
               )}
             </form>
 
-            {/* Right Column: Official Contact Directory & FAQ (6 cols) */}
-            <div className="lg:col-span-6 space-y-8">
+            {/* Right Column: Official Contact Directory & FAQ */}
+            <div className={`${isMobile || isTablet ? '' : 'lg:col-span-6'} space-y-8`}>
               {/* Direct Contact & Social Links */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div
+                className={`grid ${
+                  isMobile ? 'grid-cols-1 gap-3' : 'grid-cols-1 sm:grid-cols-3 gap-4'
+                }`}
+              >
                 <a
                   href={`https://wa.me/${SANGGAR_INFO.whatsappNumber}`}
                   target="_blank"
@@ -304,10 +327,20 @@ export const ContactAndMapSection: React.FC<ContactAndMapSectionProps> = ({
         </div>
 
         {/* Part 2: Google Maps Studio Location Integration */}
-        <div className="pt-12 border-t border-[#E6E1D6]">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-            {/* Location Address & Visiting Details (5 cols) */}
-            <div className="lg:col-span-5 p-6 sm:p-8 rounded-2xl bg-[#F2EFE9] border border-[#E6E1D6] flex flex-col justify-between gap-6">
+        <div className="pt-10 sm:pt-12 border-t border-[#E6E1D6]">
+          <div
+            className={`grid ${
+              isMobile || isTablet
+                ? 'grid-cols-1 gap-6'
+                : 'grid-cols-1 lg:grid-cols-12 gap-8'
+            } items-stretch`}
+          >
+            {/* Location Address & Visiting Details */}
+            <div
+              className={`${
+                isMobile || isTablet ? '' : 'lg:col-span-5'
+              } p-5 sm:p-8 rounded-2xl bg-[#F2EFE9] border border-[#E6E1D6] flex flex-col justify-between gap-6`}
+            >
               <div className="space-y-4">
                 <div className="text-xs text-[#78716C]">
                   Titik Lokasi Studio · Kota Bandung, Jawa Barat
@@ -360,8 +393,12 @@ export const ContactAndMapSection: React.FC<ContactAndMapSectionProps> = ({
               </div>
             </div>
 
-            {/* Embedded Interactive Google Maps (7 cols) */}
-            <div className="lg:col-span-7 min-h-[360px] sm:min-h-[420px] rounded-2xl overflow-hidden border border-[#E6E1D6] bg-[#E6E1D6]/40">
+            {/* Embedded Interactive Google Maps */}
+            <div
+              className={`${
+                isMobile || isTablet ? '' : 'lg:col-span-7'
+              } min-h-[300px] sm:min-h-[420px] rounded-2xl overflow-hidden border border-[#E6E1D6] bg-[#E6E1D6]/40`}
+            >
               <iframe
                 title="Peta Lokasi Sanggar Pitaloka Kusuma Putri di Jl. Babakan Baru Gg. Aster No.04, Kel. Sukapada, Kec. Cibeunying Kidul, Kota Bandung"
                 src={SANGGAR_INFO.googleMapsEmbedUrl}

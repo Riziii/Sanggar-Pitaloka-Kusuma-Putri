@@ -140,10 +140,6 @@ export const GallerySection: React.FC = () => {
                   <p className="mt-2 text-xs sm:text-sm text-[#E7E5E4]/85 line-clamp-2 max-w-2xl">
                     {item.description}
                   </p>
-
-                  <div className="mt-3 pt-3 border-t border-white/15 text-xs text-[#D6D3D1]">
-                    Lokasi: {item.location}
-                  </div>
                 </button>
               </div>
             );
@@ -225,10 +221,6 @@ export const GallerySection: React.FC = () => {
                     {selectedPhoto.description}
                   </p>
                   <div className="pt-3 border-t border-[#E6E1D6] space-y-1.5 text-xs text-[#57534E]">
-                    <div>
-                      <span className="font-semibold text-[#1C1917]">Lokasi Kegiatan:</span>{' '}
-                      {selectedPhoto.location}
-                    </div>
                     <div>
                       <span className="font-semibold text-[#1C1917]">Formasi:</span>{' '}
                       {selectedPhoto.dancersCount}

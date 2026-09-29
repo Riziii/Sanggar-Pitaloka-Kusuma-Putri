@@ -119,15 +119,15 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Right Dominant 16:9 Visual Carrier (6 cols) */}
+              {/* Right Dominant Visual Carrier (6 cols) */}
               <div className="lg:col-span-6">
-                <div className="relative rounded-2xl overflow-hidden border border-[#E6E1D6] bg-[#1C1917] aspect-video shadow-lg">
+                <div className="relative rounded-2xl overflow-hidden border border-[#E6E1D6] bg-[#1C1917] shadow-lg">
                   <ResilientImage
                     src={SANGGAR_INFO.heroImage}
                     alt="Penari tradisional Sunda Sanggar Pitaloka Kusuma Putri tampil di atas panggung"
-                    className="w-full h-full object-cover"
+                    className="w-full h-auto object-contain block"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
                   <div className="absolute bottom-0 inset-x-0 p-5 sm:p-6 flex flex-col sm:flex-row sm:items-end justify-between gap-3">
                     <div>
                       <div className="text-xs text-[#FDE68A] font-semibold">

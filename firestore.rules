@@ -63,10 +63,11 @@ service cloud.firestore {
              item.createdAtIso is string && item.createdAtIso.size() >= 10 && item.createdAtIso.size() <= 40;
     }
 
-    function isValidTestimonialsBoard(data) {
+    function isValidTestimonialsBoard(data, expectedBoardId) {
       return data.keys().hasAll(['boardId', 'items', 'updatedAt']) &&
              data.keys().hasOnly(['boardId', 'items', 'updatedAt']) &&
-             data.boardId is string && data.boardId.size() == 11 && data.boardId == 'public_feed' &&
+             data.boardId is string && data.boardId.size() >= 10 && data.boardId.size() <= 20 &&
+             data.boardId == expectedBoardId &&
              data.items is list && data.items.size() <= 50 &&
              (data.items.size() == 0 || isValidTestimonialItem(data.items[0])) &&
              data.updatedAt is timestamp && data.updatedAt == request.time;
@@ -126,12 +127,18 @@ service cloud.firestore {
 
     // Public Testimonials Board Document (Single-Document Get/Write, Zero List Queries)
     match /testimonials_board/{boardId} {
-      allow get: if isValidId(boardId) && boardId == 'public_feed';
+      allow get: if isValidId(boardId) && (boardId == 'public_feed' || boardId == 'public_feed_v2');
       allow list: if false;
-      allow create: if isValidId(boardId) && boardId == 'public_feed' && isValidTestimonialsBoard(incoming());
-      allow update: if isValidId(boardId) && boardId == 'public_feed' && isValidTestimonialsBoard(incoming()) &&
+      allow create: if isValidId(boardId) && (boardId == 'public_feed' || boardId == 'public_feed_v2') &&
+        isValidTestimonialsBoard(incoming(), boardId);
+      allow update: if isValidId(boardId) && (boardId == 'public_feed' || boardId == 'public_feed_v2') &&
+        isValidTestimonialsBoard(incoming(), boardId) &&
         incoming().boardId == existing().boardId &&
-        incoming().diff(existing()).affectedKeys().hasOnly(['items', 'updatedAt']);
+        incoming().diff(existing()).affectedKeys().hasOnly(['items', 'updatedAt']) &&
+        (
+          incoming().items.size() >= existing().items.size() ||
+          (isVerifiedUser() && incoming().items.size() < existing().items.size())
+        );
       allow delete: if false;
     }
 

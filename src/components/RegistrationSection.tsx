@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ArrowUpRight, Check, Copy } from 'lucide-react';
+import { useViewport } from '../context/ViewportContext';
 import { JADWAL_LATIHAN, SANGGAR_INFO } from '../data/sanggarData';
 
 interface RegistrationSectionProps {
@@ -11,6 +12,9 @@ export const RegistrationSection: React.FC<RegistrationSectionProps> = ({
   preselectedProgram,
   preselectedSchedule,
 }) => {
+  const { effectiveMode } = useViewport();
+  const isMobile = effectiveMode === 'mobile';
+  const isTablet = effectiveMode === 'tablet';
   const [fullName, setFullName] = useState('');
   const [age, setAge] = useState('');
   const [parentOrRegistrant, setParentOrRegistrant] = useState('Pendaftar Langsung (Murid)');
@@ -114,29 +118,43 @@ export const RegistrationSection: React.FC<RegistrationSectionProps> = ({
   return (
     <section
       id="pendaftaran"
-      className="py-20 md:py-24 border-b border-[#E6E1D6] bg-[#F2EFE9]/80"
+      className={`${
+        isMobile ? 'py-12' : isTablet ? 'py-16' : 'py-20 md:py-24'
+      } border-b border-[#E6E1D6] bg-[#F2EFE9]/80`}
     >
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Section Heading */}
-        <div className="max-w-2xl pb-12">
-          <p className="text-xs text-[#78716C] mb-3">
+        <div className="max-w-2xl pb-8 sm:pb-12">
+          <p className="text-xs text-[#78716C] mb-2.5">
             Penerimaan Murid Baru · Terhubung Otomatis ke WhatsApp Resmi
           </p>
-          <h2 className="font-display text-3xl md:text-4xl font-bold text-[#1C1917] tracking-tight">
+          <h2
+            className={`font-display font-bold text-[#1C1917] tracking-tight ${
+              isMobile ? 'text-2xl' : isTablet ? 'text-3xl' : 'text-3xl md:text-4xl'
+            }`}
+          >
             Formulir Pendaftaran Anggota Baru
           </h2>
-          <p className="mt-4 text-base text-[#57534E]">
+          <p className={`mt-3 text-[#57534E] ${isMobile ? 'text-sm' : 'text-base'}`}>
             Isi biodata calon murid dan program kelas yang diminati di bawah ini. Saat tombol
             pendaftaran ditekan, formulir akan otomatis menyusun pesan terformat dan langsung
             mengarah ke WhatsApp Pengurus Sanggar ({SANGGAR_INFO.whatsappDisplay}).
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-          {/* Left Column: Registration Form (7 cols) */}
+        <div
+          className={`grid ${
+            isMobile || isTablet
+              ? 'grid-cols-1 gap-8'
+              : 'grid-cols-1 lg:grid-cols-12 gap-10'
+          } items-start`}
+        >
+          {/* Left Column: Registration Form */}
           <form
             onSubmit={handleSubmit}
-            className="lg:col-span-7 p-6 sm:p-8 rounded-2xl bg-[#FAF8F5] border border-[#E6E1D6] space-y-6"
+            className={`${
+              isMobile || isTablet ? '' : 'lg:col-span-7'
+            } p-5 sm:p-8 rounded-2xl bg-[#FAF8F5] border border-[#E6E1D6] space-y-6`}
           >
             {errorMsg && (
               <div
@@ -382,8 +400,8 @@ export const RegistrationSection: React.FC<RegistrationSectionProps> = ({
             )}
           </form>
 
-          {/* Right Column: Live WhatsApp Format Preview & Registration Guide (5 cols) */}
-          <div className="lg:col-span-5 space-y-6">
+          {/* Right Column: Live WhatsApp Format Preview & Registration Guide */}
+          <div className={`${isMobile || isTablet ? '' : 'lg:col-span-5'} space-y-6`}>
             <div className="p-6 sm:p-8 rounded-2xl bg-[#1C1917] text-[#FAF8F5] space-y-5">
               <div className="flex items-center justify-between border-b border-white/15 pb-4">
                 <div>

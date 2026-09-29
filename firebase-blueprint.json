@@ -8,7 +8,7 @@
         "boardId": {
           "type": "string",
           "description": "ID papan testimoni publik",
-          "enum": ["public_feed"]
+          "enum": ["public_feed", "public_feed_v2"]
         },
         "items": {
           "type": "array",
